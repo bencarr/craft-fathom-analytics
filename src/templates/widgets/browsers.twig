@@ -3,30 +3,31 @@
 {% set total_visits = collect(response).sum('visits') %}
 
 {% block widget %}
-    <div class="fathom--browsers">
-        <div class="fathom-chart">
-            <canvas id="{{ chartId }}"></canvas>
-        </div>
-        <table>
-            <thead>
-            <tr>
-                <th>Browser</th>
-                <th class="fathom-table-shrink">Views</th>
-                <th class="fathom-table-shrink">Visitors</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for row in response %}
-                {% set percentage = (row.pageviews + row.visits) / (total_pageviews + total_visits) * 100 %}
-                <tr>
-                    <td class="fathom-table-bar" style="--fathom-bar-percentage: {{ percentage }}; --fathom-bar-color: {{ colors[row.browser] | replace('<alpha>', '1') }}; --fathom-bar-opacity: 0.25;">{{ row.browser }}</td>
-                    <td class="fathom-table-number" title="{{ row.pageviews | number }}">{{ row.pageviews | fathom_number }}</td>
-                    <td class="fathom-table-number" title="{{ row.visits | number }}">{{ row.visits | fathom_number }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+    <div class="fathom-chart">
+        <canvas id="{{ chartId }}"></canvas>
     </div>
+    <table>
+        <thead>
+        <tr>
+            <th>Browser</th>
+            <th class="fathom-table-shrink">Views</th>
+            <th class="fathom-table-shrink">Visitors</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for row in response %}
+            {% set percentage = (row.pageviews + row.visits) / (total_pageviews + total_visits) * 100 %}
+            <tr>
+                <td class="fathom-table-bar" style="--fathom-bar-percentage: {{ percentage }}; --fathom-bar-color: {{ colors[row.browser] | replace('<alpha>', '1') }}; --fathom-bar-opacity: 0.25;">
+                    {{ svg("@fathom/icons/browsers/#{row.browser|kebab}.svg") }}
+                    {{ row.browser }}
+                </td>
+                <td class="fathom-table-number" title="{{ row.pageviews | number }}">{{ row.pageviews | fathom_number }}</td>
+                <td class="fathom-table-number" title="{{ row.visits | number }}">{{ row.visits | fathom_number }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
 
 {% js %}

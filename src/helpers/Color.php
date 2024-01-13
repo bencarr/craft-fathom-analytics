@@ -8,7 +8,7 @@ class Color
 {
     // Browsers
     public const SAFARI = 'rgb(1 187 235 / <alpha>)';
-    public const FIREFOX = 'rgb(255 128 19 / <alpha>)';
+    public const FIREFOX = 'rgba(145 85 250 / <alpha>)';
     public const EDGE = 'rgb(5 82 155 / <alpha>)';
     public const CHROME = 'rgb(31 150 66 / <alpha>)';
     public const OPERA = 'rgb(255 27 45 / <alpha>)';

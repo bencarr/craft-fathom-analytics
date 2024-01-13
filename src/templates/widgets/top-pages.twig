@@ -1,29 +1,27 @@
 {% extends 'fathom/widgets/base-widget.twig' %}
 {% set max_views = response | column('pageviews') | first %}
 {% block widget %}
-    <div class="fathom--top-pages">
-        {% if response is not empty %}
-            <table>
-                <thead>
+    {% if response is not empty %}
+        <table>
+            <thead>
+            <tr>
+                <th>Top Paths</th>
+                <th class="fathom-table-shrink">Visits</th>
+                <th class="fathom-table-shrink">Views</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for row in response %}
+                {% set percentage = (row.pageviews / max_views * 100) | round %}
                 <tr>
-                    <th>Top Paths</th>
-                    <th class="fathom-table-shrink">Visits</th>
-                    <th class="fathom-table-shrink">Views</th>
+                    <td class="fathom-table-bar" style="--fathom-bar-percentage: {{ percentage }}">
+                        <a href="{{ url(row.pathname) }}">{{ row.pathname }}</a>
+                    </td>
+                    <td class="fathom-table-number" title="{{ row.visits | number }}">{{ row.visits | fathom_number }}</td>
+                    <td class="fathom-table-number" title="{{ row.pageviews | number }}">{{ row.pageviews | fathom_number }}</td>
                 </tr>
-                </thead>
-                <tbody>
-                {% for row in response %}
-                    {% set percentage = (row.pageviews / max_views * 100) | round %}
-                    <tr>
-                        <td class="fathom-table-bar" style="--fathom-bar-percentage: {{ percentage }}">
-                            <a href="{{ url(row.pathname) }}">{{ row.pathname }}</a>
-                        </td>
-                        <td class="fathom-table-number" title="{{ row.visits | number }}">{{ row.visits | fathom_number }}</td>
-                        <td class="fathom-table-number" title="{{ row.pageviews | number }}">{{ row.pageviews | fathom_number }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        {% endif %}
-    </div>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 {% endblock %}

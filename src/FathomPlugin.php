@@ -47,6 +47,7 @@ class FathomPlugin extends Plugin
     public function init(): void
     {
         parent::init();
+        Craft::setAlias('@fathom', __DIR__);
 
         // Defer most setup tasks until Craft is fully initialized
         Craft::$app->onInit(function() {

@@ -10,52 +10,50 @@
     | values %}
 
 {% block widget %}
-    <div class="fathom--current-visitors">
-        <p class="fathom-stat">
-            <span class="fathom-stat-number">{{ response.total | fathom_number }}</span>
-            <span class="fathom-stat-label">On the site</span>
-        </p>
+    <p class="fathom-stat">
+        <span class="fathom-stat-number">{{ response.total | fathom_number }}</span>
+        <span class="fathom-stat-label">On the site</span>
+    </p>
 
-        {% if response.content is not empty %}
-            <table>
-                <thead>
+    {% if response.content is not empty %}
+        <table>
+            <thead>
+            <tr>
+                <th>Top Paths</th>
+                <th class="fathom-table-shrink">Visitors</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for page in response.content %}
+                {% set percentage = (page.total / response.total * 100) | round %}
                 <tr>
-                    <th>Top Paths</th>
-                    <th class="fathom-table-shrink">Visitors</th>
+                    <td class="fathom-table-bar" style="--fathom-bar-percentage: {{ percentage }}">
+                        <a href="{{ url(page.pathname) }}">{{ page.pathname }}</a>
+                    </td>
+                    <td class="fathom-table-number" title="{{ page.total | number }}">{{ page.total | fathom_number }}</td>
                 </tr>
-                </thead>
-                <tbody>
-                {% for page in response.content %}
-                    {% set percentage = (page.total / response.total * 100) | round %}
-                    <tr>
-                        <td class="fathom-table-bar" style="--fathom-bar-percentage: {{ percentage }}">
-                            <a href="{{ url(page.pathname) }}">{{ page.pathname }}</a>
-                        </td>
-                        <td class="fathom-table-number" title="{{ page.total | number }}">{{ page.total | fathom_number }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 
-        {% if aggregated_referrers is not empty %}
-            <table>
-                <thead>
+    {% if aggregated_referrers is not empty %}
+        <table>
+            <thead>
+            <tr>
+                <th>Top Referrers</th>
+                <th class="fathom-table-shrink">Visitors</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for referrer in aggregated_referrers %}
+                {% set percentage = (referrer.total / response.total) * 100 %}
                 <tr>
-                    <th>Top Referrers</th>
-                    <th class="fathom-table-shrink">Visitors</th>
+                    <td class="fathom-table-bar" style="--fathom-bar-percentage: {{ percentage }}">{{ referrer.hostname }}</td>
+                    <td class="fathom-table-number" title="{{ referrer.total | number }}">{{ referrer.total | fathom_number }}</td>
                 </tr>
-                </thead>
-                <tbody>
-                {% for referrer in aggregated_referrers %}
-                    {% set percentage = (referrer.total / response.total) * 100 %}
-                    <tr>
-                        <td class="fathom-table-bar" style="--fathom-bar-percentage: {{ percentage }}">{{ referrer.hostname }}</td>
-                        <td class="fathom-table-number" title="{{ referrer.total | number }}">{{ referrer.total | fathom_number }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        {% endif %}
-    </div>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 {% endblock %}

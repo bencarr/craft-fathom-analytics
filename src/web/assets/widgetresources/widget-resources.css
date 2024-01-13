@@ -1,3 +1,10 @@
+.widget[data-type^="bencarr\\fathom\\widgets"] .spinner {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    --size: 1rem;
+}
+
 .fathom {
     container-type: inline-size;
 }
@@ -116,6 +123,15 @@
     position: relative;
     padding-left: 0.5em;
     text-shadow: 1px 1px rgba(255 255 255 / 0.5);
+}
+
+.fathom-table-bar svg {
+    display: inline-block;
+    vertical-align: middle;
+    width: 1rem;
+    height: 1rem;
+    margin-right: 0.25em;
+    transform: translateY(-0.125em);
 }
 
 .fathom-table-bar a {
