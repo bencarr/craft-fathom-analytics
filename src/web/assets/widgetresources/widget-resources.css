@@ -10,13 +10,13 @@
 }
 
 .fathom-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    justify-content: space-between;
+    position: relative;
 }
 
 .fathom-range select {
+    position: absolute;
+    top: 0;
+    right: 0;
     background: transparent;
     padding: 0.25em 0;
     border-bottom: 1px solid var(--hairline-color);
@@ -65,17 +65,20 @@
     }
 }
 
-.fathom--browsers {
+.fathom--browsers,
+.fathom--device-type {
     display: grid;
     grid-template-columns: 1fr;
     gap: 0.5rem 1rem;
 }
 
 @container (min-width: 640px) {
-    .fathom--browsers {
+    .fathom--browsers,
+    .fathom--device-type {
         display: grid;
         grid-template-columns: minmax(min-content, 33%) 1fr;
         grid-template-rows: min-content min-content;
+        align-items: start;
     }
 }
 
