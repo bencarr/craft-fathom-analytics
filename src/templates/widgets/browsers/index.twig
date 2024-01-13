@@ -20,8 +20,8 @@
                 {% set percentage = (row.pageviews + row.visits) / (total_pageviews + total_visits) * 100 %}
                 <tr>
                     <td class="fathom-table-bar" style="--fathom-bar-percentage: {{ percentage }}; --fathom-bar-color: {{ colors[row.browser] | replace('<alpha>', '1') }}; --fathom-bar-opacity: 0.25;">{{ row.browser }}</td>
-                    <td class="fathom-table-number">{{ row.pageviews | number }}</td>
-                    <td class="fathom-table-number">{{ row.visits | number }}</td>
+                    <td class="fathom-table-number" title="{{ row.pageviews | number }}">{{ row.pageviews | fathom_number }}</td>
+                    <td class="fathom-table-number" title="{{ row.visits | number }}">{{ row.visits | fathom_number }}</td>
                 </tr>
             {% endfor %}
             </tbody>

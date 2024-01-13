@@ -17,8 +17,8 @@
                     {% set referrer = row.referrer_hostname | replace('/^https?:\\/\\/(?:www\.)?/', '') %}
                     <tr>
                         <td class="fathom-table-bar" style="--fathom-bar-percentage: {{ percentage }}">{{ referrer ?: 'Direct / Unknown' }}</td>
-                        <td class="fathom-table-number">{{ row.visits | number }}</td>
-                        <td class="fathom-table-number">{{ row.pageviews | number }}</td>
+                        <td class="fathom-table-number" title="{{ row.visits | number }}">{{ row.visits | fathom_number }}</td>
+                        <td class="fathom-table-number" title="{{ row.pageviews | number }}">{{ row.pageviews | fathom_number }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

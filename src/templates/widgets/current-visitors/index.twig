@@ -29,7 +29,7 @@
                     {% set percentage = (page.total / response.total * 100) | round %}
                     <tr>
                         <td class="fathom-table-bar" style="--fathom-bar-percentage: {{ percentage }}">{{ page.pathname }}</td>
-                        <td class="fathom-table-number">{{ page.total | number }}</td>
+                        <td class="fathom-table-number" title="{{ page.total | number }}">{{ page.total | fathom_number }}</td>
                         <td><a href="{{ url(page.pathname) }}" data-icon="world"></a></td>
                     </tr>
                 {% endfor %}
@@ -50,7 +50,7 @@
                     {% set percentage = (referrer.total / response.total) * 100 %}
                     <tr>
                         <td class="fathom-table-bar" style="--fathom-bar-percentage: {{ percentage }}">{{ referrer.hostname }}</td>
-                        <td class="fathom-table-number">{{ referrer.total | number }}</td>
+                        <td class="fathom-table-number" title="{{ referrer.total | number }}">{{ referrer.total | fathom_number }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

@@ -82,7 +82,17 @@ class BaseWidget extends Widget
                 ),
                 'last_90_days' => new WidgetDateRange(
                     label: 'Last 90 Days',
-                    start: DateTimeHelper::tomorrow()->sub(new DateInterval('P60D')),
+                    start: DateTimeHelper::tomorrow()->sub(new DateInterval('P90D')),
+                    end: DateTimeHelper::tomorrow(),
+                ),
+                'last_180_days' => new WidgetDateRange(
+                    label: 'Last 180 Days',
+                    start: DateTimeHelper::tomorrow()->sub(new DateInterval('P180D')),
+                    end: DateTimeHelper::tomorrow(),
+                ),
+                'last_365_days' => new WidgetDateRange(
+                    label: 'Last 365 Days',
+                    start: DateTimeHelper::tomorrow()->sub(new DateInterval('P1Y')),
                     end: DateTimeHelper::tomorrow(),
                 ),
             ],

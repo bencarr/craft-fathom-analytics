@@ -17,8 +17,8 @@
                     {% set percentage = (row.pageviews / max_views * 100) | round %}
                     <tr>
                         <td class="fathom-table-bar" style="--fathom-bar-percentage: {{ percentage }}">{{ row.pathname }}</td>
-                        <td class="fathom-table-number">{{ row.visits | number }}</td>
-                        <td class="fathom-table-number">{{ row.pageviews | number }}</td>
+                        <td class="fathom-table-number" title="{{ row.visits | number }}">{{ row.visits | fathom_number }}</td>
+                        <td class="fathom-table-number" title="{{ row.pageviews | number }}">{{ row.pageviews | fathom_number }}</td>
                         <td><a href="{{ url(row.pathname) }}" data-icon="world"></a></td>
                     </tr>
                 {% endfor %}
