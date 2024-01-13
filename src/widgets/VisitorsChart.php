@@ -13,7 +13,7 @@ class VisitorsChart extends BaseWidget
 
     public static function displayName(): string
     {
-        return Craft::t('fathom', 'Visitors Chart');
+        return Craft::t('fathom', 'Visitors');
     }
 
     public function getBodyHtml(): ?string
