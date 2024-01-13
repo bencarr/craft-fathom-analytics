@@ -1,0 +1,23 @@
+{# @var plugin \bencarr\fathom\FathomPlugin #}
+{# @var settings \bencarr\fathom\models\Settings #}
+
+{% import '_includes/forms.twig' as forms %}
+
+{{ forms.autosuggestField({
+    first: true,
+    label: 'API Key',
+    instructions: '[Create an API key](https://app.usefathom.com/api/create) in your Fathom Analytics account.',
+    name: 'apiKey',
+    value: settings.apiKey,
+    suggestEnvVars: true,
+    errors: settings.getErrors('apiKey'),
+}) }}
+
+{{ forms.autosuggestField({
+    label: 'Site ID',
+    instructions: '[Find your site ID](https://app.usefathom.com/sites) by viewing the site in your Fathom Analytics account.',
+    name: 'siteId',
+    value: settings.siteId,
+    suggestEnvVars: true,
+    errors: settings.getErrors('siteId'),
+}) }}

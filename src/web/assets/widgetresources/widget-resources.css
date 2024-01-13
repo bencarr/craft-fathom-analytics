@@ -1,0 +1,101 @@
+.fathom {
+    container-type: inline-size;
+}
+
+.fathom-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 0.5rem;
+    margin-top: 1rem;
+    border-top: 1px solid var(--hairline-color);
+    font-size: 0.875em;
+}
+
+.fathom-footer time {
+    font-style: italic;
+    opacity: 0.75;
+}
+
+.fathom-footer button {
+    color: var(--link-color);
+}
+
+.fathom--current-visitors {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem 1rem;
+}
+
+
+@container (min-width: 640px) {
+    .fathom--current-visitors {
+        display: grid;
+        grid-template-columns: minmax(min-content, 33%) 1fr;
+        grid-template-rows: min-content min-content;
+    }
+
+    .fathom--current-visitors .fathom-stat {
+        grid-row: 1 / span 2;
+    }
+}
+
+.fathom-stat {
+    display: flex;
+    flex-flow: column;
+    gap: 0.5em;
+}
+
+.fathom-stat-number {
+    font-size: 3rem;
+    line-height: 0.9;
+}
+
+.fathom-stat-label {
+    text-transform: uppercase;
+    font-weight: bold;
+    opacity: 0.75;
+    font-size: 0.875em;
+}
+
+.fathom table {
+    width: 100%;
+}
+
+.fathom table th {
+    border-bottom: 2px solid rgba(0 0 0 / 0.2);
+    padding-bottom: 0.5em;
+    text-transform: uppercase;
+    font-size: 0.875em;
+    letter-spacing: 0.03em;
+}
+
+.fathom table .fathom-table-bar {
+    position: relative;
+    padding-left: 0.5em;
+    text-shadow: 1px 1px rgba(255 255 255 / 0.5);
+}
+
+.fathom table .fathom-table-bar::before {
+    content: "";
+    width: calc(1% * var(--fathom-percentage, 0));
+    position: absolute;
+    top: 0.25em;
+    left: 0;
+    height: calc(100% - 0.5em);
+    background: var(--link-color);
+    opacity: 0.15;
+    border-radius: 0.25rem;
+    z-index: -1;
+}
+
+.fathom .fathom-table-number {
+    font-variant-numeric: lining-nums;
+    text-align: right;
+}
+
+.fathom .fathom-table-shrink {
+    width: 1px;
+}
+

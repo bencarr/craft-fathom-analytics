@@ -1,0 +1,60 @@
+{% extends 'fathom/widgets/refreshable-widget.twig' %}
+{% block widget %}
+    {% set aggregated_referrers = response.referrers
+        | group('referrer_hostname')
+        | map((paths, hostname) => {
+        hostname: hostname | replace('/^https?:\\/\\//', ''),
+        total: collect(paths).sum('total'),
+    })
+        | multisort('total', direction=SORT_DESC)
+        | values %}
+
+    <div class="fathom--current-visitors">
+        <p class="fathom-stat">
+            <span class="fathom-stat-number">{{ response.total | number }}</span>
+            <span class="fathom-stat-label">On the site</span>
+        </p>
+
+        {% if response.content is not empty %}
+            <table>
+                <thead>
+                <tr>
+                    <th>Top Paths</th>
+                    <th class="fathom-table-shrink">Visitors</th>
+                    <th class="fathom-table-shrink" data-icon="world"><!-- Link --></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for page in response.content %}
+                    {% set percentage = (page.total / response.total * 100) | round %}
+                    <tr>
+                        <td class="fathom-table-bar" style="--fathom-percentage: {{ percentage }}">{{ page.pathname }}</td>
+                        <td class="fathom-table-number">{{ page.total | number }}</td>
+                        <td><a href="{{ url(page.pathname) }}" data-icon="world"></a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+
+        {% if aggregated_referrers is not empty %}
+            <table>
+                <thead>
+                <tr>
+                    <th>Top Referrers</th>
+                    <th class="fathom-table-shrink">Visitors</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for referrer in aggregated_referrers %}
+                    {% set percentage = (referrer.total / response.total) * 100 %}
+                    <tr>
+                        <td class="fathom-table-bar" style="--fathom-percentage: {{ percentage }}">{{ referrer.hostname }}</td>
+                        <td class="fathom-table-number">{{ referrer.total | number }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+{% endblock %}
