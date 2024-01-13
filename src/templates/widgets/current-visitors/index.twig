@@ -22,16 +22,16 @@
                 <tr>
                     <th>Top Paths</th>
                     <th class="fathom-table-shrink">Visitors</th>
-                    <th class="fathom-table-shrink" data-icon="world"><!-- Link --></th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for page in response.content %}
                     {% set percentage = (page.total / response.total * 100) | round %}
                     <tr>
-                        <td class="fathom-table-bar" style="--fathom-bar-percentage: {{ percentage }}">{{ page.pathname }}</td>
+                        <td class="fathom-table-bar" style="--fathom-bar-percentage: {{ percentage }}">
+                            <a href="{{ url(page.pathname) }}">{{ page.pathname }}</a>
+                        </td>
                         <td class="fathom-table-number" title="{{ page.total | number }}">{{ page.total | fathom_number }}</td>
-                        <td><a href="{{ url(page.pathname) }}" data-icon="world"></a></td>
                     </tr>
                 {% endfor %}
                 </tbody>

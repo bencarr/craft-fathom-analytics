@@ -118,6 +118,10 @@
     text-shadow: 1px 1px rgba(255 255 255 / 0.5);
 }
 
+.fathom-table-bar a {
+    color: inherit;
+}
+
 .fathom table .fathom-table-bar::before {
     content: "";
     width: calc(1% * var(--fathom-bar-percentage, 0));
