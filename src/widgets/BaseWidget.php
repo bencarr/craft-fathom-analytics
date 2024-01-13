@@ -102,8 +102,8 @@ class BaseWidget extends Widget
                     'intersect' => false,
                     'mode' => 'index',
                 ],
-                'backgroundColor' => 'rgba(31 95 234 / 0.2)',
-                'borderColor' => 'rgba(31 95 234 / 0.5)',
+                // 'backgroundColor' => 'rgba(31 95 234 / 0.2)',
+                // 'borderColor' => 'rgba(31 95 234 / 0.5)',
                 'borderWidth' => 2,
                 'datasets' => [
                     'line' => [

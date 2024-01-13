@@ -59,10 +59,10 @@
 }
 
 .fathom--browsers {
-     display: grid;
-     grid-template-columns: 1fr;
-     gap: 0.5rem 1rem;
- }
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem 1rem;
+}
 
 @container (min-width: 640px) {
     .fathom--browsers {
@@ -128,12 +128,4 @@
 
 .fathom .fathom-table-shrink {
     width: 1px;
-}
-
-:root {
-    --edge: rgb(5, 82, 155);
-    --opera: rgb(255, 27, 45);
-    --firefox: rgb(255, 128, 19);
-    --safari: rgb(1, 187, 235);
-    --chrome: rgb(31, 150, 66);
 }

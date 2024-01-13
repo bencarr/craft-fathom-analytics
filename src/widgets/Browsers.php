@@ -3,6 +3,7 @@
 namespace bencarr\fathom\widgets;
 
 use bencarr\fathom\FathomPlugin;
+use bencarr\fathom\helpers\Color;
 use Craft;
 
 class Browsers extends BaseWidget
@@ -18,16 +19,8 @@ class Browsers extends BaseWidget
     {
         $range = $this->getRanges()[$this->range];
         $response = FathomPlugin::getInstance()->api->getBrowsers($range, $this->range);
-        $colors = [
-            'Edge' => 'rgb(5 82 155 / <alpha>)',
-            'Opera' => 'rgb(255 27 45 / <alpha>)',
-            'Firefox' => 'rgb(255 128 19 / <alpha>)',
-            'Mozilla' => 'rgb(255 128 19 / <alpha>)',
-            'Safari' => 'rgb(1 187 235 / <alpha>)',
-            'Chrome' => 'rgb(31 150 66 / <alpha>)',
-        ];
         $response = collect($response)
-            ->filter(fn($row) => array_key_exists($row['browser'], $colors));
+            ->filter(fn($row) => Color::forBrowser($row['browser']));
 
         return $this->renderChart('browsers', [
             'labels' => collect($response)->pluck('browser')->toArray(),
@@ -35,31 +28,21 @@ class Browsers extends BaseWidget
                 [
                     'label' => Craft::t('fathom', 'Pageviews'),
                     'backgroundColor' => collect($response)
-                        ->map(fn($row) => $colors[$row['browser']] ?? 'rgba(31 95 234 / <alpha>)')
-                        ->map(fn($color) => str_replace('<alpha>', '0.5', $color))
-                        ->toArray(),
-                    'borderColor' => collect($response)
-                        ->map(fn($row) => $colors[$row['browser']] ?? 'rgba(31 95 234 / <alpha>)')
-                        ->map(fn($color) => str_replace('<alpha>', '0.8', $color))
+                        ->map(fn($row) => Color::forBrowser($row['browser'])->atAlpha(0.5))
                         ->toArray(),
                     'data' => collect($response)->pluck('pageviews')->toArray(),
                 ],
                 [
                     'label' => Craft::t('fathom', 'Visitors'),
                     'backgroundColor' => collect($response)
-                        ->map(fn($row) => $colors[$row['browser']] ?? 'rgba(31 95 234 / <alpha>)')
-                        ->map(fn($color) => str_replace('<alpha>', '0.5', $color))
-                        ->toArray(),
-                    'borderColor' => collect($response)
-                        ->map(fn($row) => $colors[$row['browser']] ?? 'rgba(31 95 234 / <alpha>)')
-                        ->map(fn($color) => str_replace('<alpha>', '0.8', $color))
+                        ->map(fn($row) => Color::forBrowser($row['browser'])->atAlpha(0.5))
                         ->toArray(),
                     'data' => collect($response)->pluck('visits')->toArray(),
                 ],
             ],
         ], [
             'response' => $response,
-            'colors' => $colors,
+            'colors' => collect($response)->pluck('browser', 'browser')->map(fn($browser) => Color::forBrowser($browser)),
         ]);
     }
 }
