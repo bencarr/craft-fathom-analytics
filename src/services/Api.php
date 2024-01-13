@@ -78,6 +78,25 @@ class Api extends Component
         });
     }
 
+    public function getBrowsers(WidgetDateRange $range, string $key)
+    {
+        return $this->cache("browsers.$key", 1, function() use ($range) {
+            $siteId = App::parseEnv(FathomPlugin::getInstance()->getSettings()->siteId);
+            return $this->request('GET', 'aggregations', [
+                'query' => [
+                    'entity' => 'pageview',
+                    'entity_id' => $siteId,
+                    'aggregates' => 'visits,pageviews',
+                    'sort_by' => 'pageviews:desc',
+                    'field_grouping' => 'browser',
+                    'timezone' => Craft::$app->getTimeZone(),
+                    'date_from' => $range->start->format('Y-m-d'),
+                    'date_to' => $range->end->format('Y-m-d'),
+                ],
+            ])->json();
+        });
+    }
+
     public function cache(string $key, int $duration, callable $setter)
     {
         return Craft::$app->getCache()?->getOrSet($key, $setter, $duration);

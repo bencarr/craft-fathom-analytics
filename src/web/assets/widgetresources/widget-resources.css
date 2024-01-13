@@ -46,7 +46,6 @@
     gap: 0.5rem 1rem;
 }
 
-
 @container (min-width: 640px) {
     .fathom--current-visitors {
         display: grid;
@@ -56,6 +55,20 @@
 
     .fathom--current-visitors .fathom-stat {
         grid-row: 1 / span 2;
+    }
+}
+
+.fathom--browsers {
+     display: grid;
+     grid-template-columns: 1fr;
+     gap: 0.5rem 1rem;
+ }
+
+@container (min-width: 640px) {
+    .fathom--browsers {
+        display: grid;
+        grid-template-columns: minmax(min-content, 33%) 1fr;
+        grid-template-rows: min-content min-content;
     }
 }
 
@@ -97,13 +110,13 @@
 
 .fathom table .fathom-table-bar::before {
     content: "";
-    width: calc(1% * var(--fathom-percentage, 0));
+    width: calc(1% * var(--fathom-bar-percentage, 0));
     position: absolute;
     top: 0.25em;
     left: 0;
     height: calc(100% - 0.5em);
-    background: var(--link-color);
-    opacity: 0.15;
+    background: var(--fathom-bar-color, var(--link-color));
+    opacity: var(--fathom-bar-opacity, 0.15);
     border-radius: 0.25rem;
     z-index: -1;
 }
@@ -117,3 +130,10 @@
     width: 1px;
 }
 
+:root {
+    --edge: rgb(5, 82, 155);
+    --opera: rgb(255, 27, 45);
+    --firefox: rgb(255, 128, 19);
+    --safari: rgb(1, 187, 235);
+    --chrome: rgb(31, 150, 66);
+}

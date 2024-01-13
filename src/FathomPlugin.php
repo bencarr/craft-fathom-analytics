@@ -4,6 +4,7 @@ namespace bencarr\fathom;
 
 use bencarr\fathom\models\Settings;
 use bencarr\fathom\services\Api;
+use bencarr\fathom\widgets\Browsers;
 use bencarr\fathom\widgets\CurrentVisitors;
 use bencarr\fathom\widgets\VisitorsChart;
 use Craft;
@@ -76,6 +77,9 @@ class FathomPlugin extends Plugin
         });
         Event::on(Dashboard::class, Dashboard::EVENT_REGISTER_WIDGET_TYPES, function(RegisterComponentTypesEvent $event) {
             $event->types[] = VisitorsChart::class;
+        });
+        Event::on(Dashboard::class, Dashboard::EVENT_REGISTER_WIDGET_TYPES, function(RegisterComponentTypesEvent $event) {
+            $event->types[] = Browsers::class;
         });
     }
 }

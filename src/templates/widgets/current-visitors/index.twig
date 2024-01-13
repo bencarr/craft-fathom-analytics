@@ -28,7 +28,7 @@
                 {% for page in response.content %}
                     {% set percentage = (page.total / response.total * 100) | round %}
                     <tr>
-                        <td class="fathom-table-bar" style="--fathom-percentage: {{ percentage }}">{{ page.pathname }}</td>
+                        <td class="fathom-table-bar" style="--fathom-bar-percentage: {{ percentage }}">{{ page.pathname }}</td>
                         <td class="fathom-table-number">{{ page.total | number }}</td>
                         <td><a href="{{ url(page.pathname) }}" data-icon="world"></a></td>
                     </tr>
@@ -49,7 +49,7 @@
                 {% for referrer in aggregated_referrers %}
                     {% set percentage = (referrer.total / response.total) * 100 %}
                     <tr>
-                        <td class="fathom-table-bar" style="--fathom-percentage: {{ percentage }}">{{ referrer.hostname }}</td>
+                        <td class="fathom-table-bar" style="--fathom-bar-percentage: {{ percentage }}">{{ referrer.hostname }}</td>
                         <td class="fathom-table-number">{{ referrer.total | number }}</td>
                     </tr>
                 {% endfor %}

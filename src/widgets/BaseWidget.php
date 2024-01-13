@@ -37,6 +37,19 @@ class BaseWidget extends Widget
         ]);
     }
 
+    public function renderChart(string $path, array $chart_data = [], array $twig_data = [])
+    {
+        $chart_id = "widget{$this->id}-chart";
+        Craft::$app->getView()->registerJsVar('chartId', $chart_id);
+        Craft::$app->getView()->registerJsVar('chartData', $chart_data);
+        Craft::$app->getView()->registerJsVar('chartSettings', $this->getChartJsSettings());
+
+        return $this->renderWidget($path, [
+            ...$twig_data,
+            'chartId' => $chart_id,
+        ]);
+    }
+
     protected function getRanges()
     {
         $event = new RegisterWidgetRangesEvent([
@@ -100,19 +113,6 @@ class BaseWidget extends Widget
                         'pointBorderWidth' => 0,
                         'hoverBackgroundColor' => 'rgba(31 95 234 / 0.7)',
                         'hoverBorderColor' => 'rgba(31 95 234 / 0.7)',
-                    ],
-                ],
-
-                'scales' => [
-                    'x' => [
-                        'grid' => [
-                            'display' => false,
-                        ],
-                    ],
-                    'y' => [
-                        'grid' => [
-                            'display' => false,
-                        ],
                     ],
                 ],
                 'plugins' => [

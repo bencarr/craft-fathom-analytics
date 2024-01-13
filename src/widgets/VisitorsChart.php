@@ -20,7 +20,8 @@ class VisitorsChart extends BaseWidget
     {
         $range = $this->getRanges()[$this->range];
         $response = FathomPlugin::getInstance()->api->getVisitorsChart($range, $this->range);
-        $chart_data = [
+
+        return $this->renderChart('visitors-chart', [
             'labels' => collect($response)->map(fn($row) => (new DateTime($row['date']))->format($range->interval === FathomDateGrouping::HOUR ? 'ga' : 'M j')),
             'datasets' => [
                 [
@@ -36,14 +37,6 @@ class VisitorsChart extends BaseWidget
                     'data' => collect($response)->pluck('visits')->toArray(),
                 ],
             ],
-        ];
-
-        Craft::$app->getView()->registerJsVar('chartId', "widget$this->id-chart");
-        Craft::$app->getView()->registerJsVar('chartData', $chart_data);
-        Craft::$app->getView()->registerJsVar('chartSettings', $this->getChartJsSettings());
-
-        return $this->renderWidget('visitors-chart', [
-            'chart_data' => $chart_data,
         ]);
     }
 }
