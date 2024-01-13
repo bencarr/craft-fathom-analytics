@@ -11,10 +11,16 @@ use bencarr\fathom\web\assets\widgetresources\WidgetResourcesAsset;
 use Craft;
 use craft\base\Widget;
 use craft\helpers\DateTimeHelper;
+use craft\helpers\StringHelper;
 use DateInterval;
 
 class BaseWidget extends Widget
 {
+    public function getTitle(): ?string
+    {
+        return null;
+    }
+
     public static function isSelectable(): bool
     {
         return true;
@@ -31,6 +37,8 @@ class BaseWidget extends Widget
 
         return Craft::$app->getView()->renderTemplate("fathom/widgets/$path", [
             'widget' => $this,
+            'slug' => StringHelper::toKebabCase($this->displayName()),
+            'hasRange' => isset($this->range),
             'timestamp' => DateTimeHelper::now(),
             'ranges' => $this->getRanges(),
             ...$data,

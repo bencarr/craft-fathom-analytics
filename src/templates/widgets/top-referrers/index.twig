@@ -1,4 +1,4 @@
-{% extends 'fathom/widgets/range-widget.twig' %}
+{% extends 'fathom/widgets/base-widget.twig' %}
 {% set max_views = response | column('pageviews') | first %}
 {% block widget %}
     <div class="fathom--top-pages">

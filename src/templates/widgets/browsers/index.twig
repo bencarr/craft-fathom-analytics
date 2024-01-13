@@ -1,4 +1,4 @@
-{% extends 'fathom/widgets/range-widget.twig' %}
+{% extends 'fathom/widgets/base-widget.twig' %}
 {% set total_pageviews = collect(response).sum('pageviews') %}
 {% set total_visits = collect(response).sum('visits') %}
 

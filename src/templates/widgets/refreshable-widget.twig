@@ -1,7 +1,0 @@
-<div class="fathom">
-    {% block widget %}{% endblock %}
-    <div class="fathom-footer">
-        <time datetime="{{ timestamp | date('c') }}">As of {{ timestamp | date('M j, Y g:ia') }}</time>
-        <button type="button" data-icon="refresh" onclick="Craft.Fathom.reload({{ widget.id }})"></button>
-    </div>
-</div>

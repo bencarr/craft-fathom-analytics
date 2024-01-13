@@ -2,18 +2,18 @@
     container-type: inline-size;
 }
 
-.fathom-range {
-    position: absolute;
-    bottom: 100%;
-    right: 0;
-    transform: translateY(-8px);
+.fathom-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    justify-content: space-between;
 }
 
 .fathom-range select {
     background: transparent;
-    padding: 0.25em 0.5em;
-    border: 1px solid var(--hairline-color);
-    border-radius: 0.25em;
+    padding: 0.25em 0;
+    border-bottom: 1px solid var(--hairline-color);
+    border-radius: 0;
 }
 
 .fathom-footer {

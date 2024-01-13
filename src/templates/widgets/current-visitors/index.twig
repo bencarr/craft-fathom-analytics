@@ -1,14 +1,15 @@
-{% extends 'fathom/widgets/refreshable-widget.twig' %}
-{% block widget %}
-    {% set aggregated_referrers = response.referrers
-        | group('referrer_hostname')
-        | map((paths, hostname) => {
+{% extends 'fathom/widgets/base-widget.twig' %}
+
+{% set aggregated_referrers = response.referrers
+    | group('referrer_hostname')
+    | map((paths, hostname) => {
         hostname: hostname | replace('/^https?:\\/\\/(?:www\.)?/', ''),
         total: collect(paths).sum('total'),
     })
-        | multisort('total', direction=SORT_DESC)
-        | values %}
+    | multisort('total', direction=SORT_DESC)
+    | values %}
 
+{% block widget %}
     <div class="fathom--current-visitors">
         <p class="fathom-stat">
             <span class="fathom-stat-number">{{ response.total | fathom_number }}</span>
