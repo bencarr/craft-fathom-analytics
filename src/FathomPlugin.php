@@ -5,6 +5,7 @@ namespace bencarr\fathom;
 use bencarr\fathom\models\Settings;
 use bencarr\fathom\services\Api;
 use bencarr\fathom\widgets\CurrentVisitors;
+use bencarr\fathom\widgets\VisitorsChart;
 use Craft;
 use craft\base\Model;
 use craft\base\Plugin;
@@ -24,6 +25,9 @@ use yii\base\Event;
  */
 class FathomPlugin extends Plugin
 {
+    public const EVENT_DEFINE_WIDGET_RANGES = 'defineWidgetRanges';
+    public const EVENT_REGISTER_CHART_JS_SETTINGS = 'registerChartJsSettings';
+
     public string $schemaVersion = '1.0.0';
     public bool $hasCpSettings = true;
 
@@ -69,6 +73,9 @@ class FathomPlugin extends Plugin
         // (see https://craftcms.com/docs/4.x/extend/events.html to get started)
         Event::on(Dashboard::class, Dashboard::EVENT_REGISTER_WIDGET_TYPES, function(RegisterComponentTypesEvent $event) {
             $event->types[] = CurrentVisitors::class;
+        });
+        Event::on(Dashboard::class, Dashboard::EVENT_REGISTER_WIDGET_TYPES, function(RegisterComponentTypesEvent $event) {
+            $event->types[] = VisitorsChart::class;
         });
     }
 }

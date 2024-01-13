@@ -4,6 +4,8 @@ namespace bencarr\fathom\services;
 
 use bencarr\fathom\FathomPlugin;
 use bencarr\fathom\helpers\ApiResponse;
+use bencarr\fathom\helpers\FathomDateGrouping;
+use bencarr\fathom\helpers\WidgetDateRange;
 use Craft;
 use craft\helpers\App;
 use GuzzleHttp\Client;
@@ -42,12 +44,35 @@ class Api extends Component
 
     public function getCurrentVisitors()
     {
-        return $this->cache('current_visitors', 1, function() {
+        return $this->cache('current_visitors', 60, function() {
             $siteId = App::parseEnv(FathomPlugin::getInstance()->getSettings()->siteId);
             return $this->request('GET', 'current_visitors', [
                 'query' => [
                     'site_id' => $siteId,
                     'detailed' => 'true',
+                ],
+            ])->json();
+        });
+    }
+
+    public function getVisitorsChart(WidgetDateRange $range, string $key)
+    {
+        $cache_duration = match ($range->interval) {
+            FathomDateGrouping::HOUR => 60 * 60,
+            default => 60 * 60 * 5,
+        };
+        return $this->cache("visitors_chart.$key", $cache_duration, function() use ($range) {
+            $siteId = App::parseEnv(FathomPlugin::getInstance()->getSettings()->siteId);
+            return $this->request('GET', 'aggregations', [
+                'query' => [
+                    'entity' => 'pageview',
+                    'entity_id' => $siteId,
+                    'aggregates' => 'visits,pageviews',
+                    'timezone' => Craft::$app->getTimeZone(),
+                    'date_from' => $range->start->format('Y-m-d'),
+                    'date_to' => $range->end->format('Y-m-d'),
+                    'date_grouping' => $range->interval,
+                    'sort_by' => 'timestamp:asc',
                 ],
             ])->json();
         });

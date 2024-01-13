@@ -2,6 +2,20 @@
     container-type: inline-size;
 }
 
+.fathom-range {
+    position: absolute;
+    bottom: 100%;
+    right: 0;
+    transform: translateY(-8px);
+}
+
+.fathom-range select {
+    background: transparent;
+    padding: 0.25em 0.5em;
+    border: 1px solid var(--hairline-color);
+    border-radius: 0.25em;
+}
+
 .fathom-footer {
     display: flex;
     align-items: center;
@@ -20,6 +34,10 @@
 
 .fathom-footer button {
     color: var(--link-color);
+}
+
+.fathom-chart {
+    height: 200px;
 }
 
 .fathom--current-visitors {

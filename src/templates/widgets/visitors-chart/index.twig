@@ -1,0 +1,15 @@
+{% extends 'fathom/widgets/range-widget.twig' %}
+{% block widget %}
+    <div class="fathom-chart">
+        <canvas id="widget{{ widget.id }}-chart"></canvas>
+    </div>
+{% endblock %}
+
+{% js %}
+chartSettings.plugins.tooltip.displayColors = false;
+const VisitorsChart = new Chart(document.getElementById(chartId), {
+    type: 'line',
+    options: chartSettings,
+    data: chartData
+});
+{% endjs %}

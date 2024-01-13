@@ -2,14 +2,14 @@
 
 namespace bencarr\fathom\web\assets\widgetresources;
 
+use bencarr\fathom\web\assets\chartjs\ChartJsAsset;
 use craft\web\AssetBundle;
-use craft\web\assets\htmx\HtmxAsset;
 
 class WidgetResourcesAsset extends AssetBundle
 {
     public $sourcePath = __DIR__ . '/';
     public $depends = [
-        HtmxAsset::class,
+        ChartJsAsset::class,
     ];
     public $js = [
         'widget-resources.js',
