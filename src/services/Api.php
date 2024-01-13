@@ -80,7 +80,7 @@ class Api extends Component
 
     public function getBrowsers(WidgetDateRange $range, string $key)
     {
-        return $this->cache("browsers.$key", 1, function() use ($range) {
+        return $this->cache("browsers.$key", 60 * 60, function() use ($range) {
             $siteId = App::parseEnv(FathomPlugin::getInstance()->getSettings()->siteId);
             return $this->request('GET', 'aggregations', [
                 'query' => [
@@ -99,7 +99,7 @@ class Api extends Component
 
     public function getDeviceTypes(WidgetDateRange $range, string $key)
     {
-        return $this->cache("device_types.$key", 1, function() use ($range) {
+        return $this->cache("device_types.$key", 60 * 60, function() use ($range) {
             $siteId = App::parseEnv(FathomPlugin::getInstance()->getSettings()->siteId);
             return $this->request('GET', 'aggregations', [
                 'query' => [
@@ -111,6 +111,46 @@ class Api extends Component
                     'timezone' => Craft::$app->getTimeZone(),
                     'date_from' => $range->start->format('Y-m-d'),
                     'date_to' => $range->end->format('Y-m-d'),
+                ],
+            ])->json();
+        });
+    }
+
+    public function getTopPages(WidgetDateRange $range, string $key)
+    {
+        return $this->cache("top_pages.$key", 60 * 60, function() use ($range) {
+            $siteId = App::parseEnv(FathomPlugin::getInstance()->getSettings()->siteId);
+            return $this->request('GET', 'aggregations', [
+                'query' => [
+                    'entity' => 'pageview',
+                    'entity_id' => $siteId,
+                    'aggregates' => 'visits,pageviews',
+                    'sort_by' => 'pageviews:desc',
+                    'field_grouping' => 'pathname',
+                    'timezone' => Craft::$app->getTimeZone(),
+                    'date_from' => $range->start->format('Y-m-d'),
+                    'date_to' => $range->end->format('Y-m-d'),
+                    'limit' => 10,
+                ],
+            ])->json();
+        });
+    }
+
+    public function getTopReferrers(WidgetDateRange $range, string $key)
+    {
+        return $this->cache("top_referrers.$key", 60 * 60, function() use ($range) {
+            $siteId = App::parseEnv(FathomPlugin::getInstance()->getSettings()->siteId);
+            return $this->request('GET', 'aggregations', [
+                'query' => [
+                    'entity' => 'pageview',
+                    'entity_id' => $siteId,
+                    'aggregates' => 'visits,pageviews',
+                    'sort_by' => 'pageviews:desc',
+                    'field_grouping' => 'referrer_hostname',
+                    'timezone' => Craft::$app->getTimeZone(),
+                    'date_from' => $range->start->format('Y-m-d'),
+                    'date_to' => $range->end->format('Y-m-d'),
+                    'limit' => 10,
                 ],
             ])->json();
         });

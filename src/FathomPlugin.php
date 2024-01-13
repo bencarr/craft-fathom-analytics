@@ -7,6 +7,8 @@ use bencarr\fathom\services\Api;
 use bencarr\fathom\widgets\Browsers;
 use bencarr\fathom\widgets\CurrentVisitors;
 use bencarr\fathom\widgets\DeviceType;
+use bencarr\fathom\widgets\TopPages;
+use bencarr\fathom\widgets\TopReferrers;
 use bencarr\fathom\widgets\VisitorsChart;
 use Craft;
 use craft\base\Model;
@@ -75,15 +77,11 @@ class FathomPlugin extends Plugin
         // (see https://craftcms.com/docs/4.x/extend/events.html to get started)
         Event::on(Dashboard::class, Dashboard::EVENT_REGISTER_WIDGET_TYPES, function(RegisterComponentTypesEvent $event) {
             $event->types[] = CurrentVisitors::class;
-        });
-        Event::on(Dashboard::class, Dashboard::EVENT_REGISTER_WIDGET_TYPES, function(RegisterComponentTypesEvent $event) {
             $event->types[] = VisitorsChart::class;
-        });
-        Event::on(Dashboard::class, Dashboard::EVENT_REGISTER_WIDGET_TYPES, function(RegisterComponentTypesEvent $event) {
             $event->types[] = Browsers::class;
-        });
-        Event::on(Dashboard::class, Dashboard::EVENT_REGISTER_WIDGET_TYPES, function(RegisterComponentTypesEvent $event) {
             $event->types[] = DeviceType::class;
+            $event->types[] = TopPages::class;
+            $event->types[] = TopReferrers::class;
         });
     }
 }

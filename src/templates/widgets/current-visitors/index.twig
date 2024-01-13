@@ -3,7 +3,7 @@
     {% set aggregated_referrers = response.referrers
         | group('referrer_hostname')
         | map((paths, hostname) => {
-        hostname: hostname | replace('/^https?:\\/\\//', ''),
+        hostname: hostname | replace('/^https?:\\/\\/(?:www\.)?/', ''),
         total: collect(paths).sum('total'),
     })
         | multisort('total', direction=SORT_DESC)

@@ -1,0 +1,28 @@
+{% extends 'fathom/widgets/range-widget.twig' %}
+{% set max_views = response | column('pageviews') | first %}
+{% block widget %}
+    <div class="fathom--top-pages">
+        {% if response is not empty %}
+            <table>
+                <thead>
+                <tr>
+                    <th>Top Paths</th>
+                    <th class="fathom-table-shrink">Visits</th>
+                    <th class="fathom-table-shrink">Views</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for row in response %}
+                    {% set percentage = (row.pageviews / max_views * 100) | round %}
+                    {% set referrer = row.referrer_hostname | replace('/^https?:\\/\\/(?:www\.)?/', '') %}
+                    <tr>
+                        <td class="fathom-table-bar" style="--fathom-bar-percentage: {{ percentage }}">{{ referrer ?: 'Direct / Unknown' }}</td>
+                        <td class="fathom-table-number">{{ row.visits | number }}</td>
+                        <td class="fathom-table-number">{{ row.pageviews | number }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+{% endblock %}
