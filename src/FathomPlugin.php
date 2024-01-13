@@ -86,8 +86,6 @@ class FathomPlugin extends Plugin
             $event->types[] = DeviceType::class;
             $event->types[] = TopPages::class;
             $event->types[] = TopReferrers::class;
-        });
-        Event::on(Dashboard::class, Dashboard::EVENT_REGISTER_WIDGET_TYPES, function(RegisterComponentTypesEvent $event) {
             $event->types[] = Overview::class;
         });
     }

@@ -8,7 +8,7 @@ use Craft;
 
 class Browsers extends BaseWidget
 {
-    public string $range = 'last_90_days';
+    public string $range = 'last_30_days';
 
     public static function displayName(): string
     {

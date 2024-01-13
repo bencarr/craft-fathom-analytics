@@ -9,7 +9,7 @@ use DateTime;
 
 class VisitorsChart extends BaseWidget
 {
-    public string $range = 'last_7_days';
+    public string $range = 'last_30_days';
 
     public static function displayName(): string
     {
