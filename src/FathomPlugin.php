@@ -4,9 +4,11 @@ namespace bencarr\fathom;
 
 use bencarr\fathom\models\Settings;
 use bencarr\fathom\services\Api;
+use bencarr\fathom\web\twig\FathomFormatters;
 use bencarr\fathom\widgets\Browsers;
 use bencarr\fathom\widgets\CurrentVisitors;
 use bencarr\fathom\widgets\DeviceType;
+use bencarr\fathom\widgets\Overview;
 use bencarr\fathom\widgets\TopPages;
 use bencarr\fathom\widgets\TopReferrers;
 use bencarr\fathom\widgets\VisitorsChart;
@@ -51,6 +53,7 @@ class FathomPlugin extends Plugin
             $this->attachEventHandlers();
             // ...
         });
+        Craft::$app->view->registerTwigExtension(new FathomFormatters());
     }
 
     protected function createSettingsModel(): ?Model
@@ -82,6 +85,9 @@ class FathomPlugin extends Plugin
             $event->types[] = DeviceType::class;
             $event->types[] = TopPages::class;
             $event->types[] = TopReferrers::class;
+        });
+        Event::on(Dashboard::class, Dashboard::EVENT_REGISTER_WIDGET_TYPES, function(RegisterComponentTypesEvent $event) {
+            $event->types[] = Overview::class;
         });
     }
 }
