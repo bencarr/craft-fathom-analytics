@@ -1,39 +1,55 @@
-{% extends 'fathom/widgets/base-widget.twig' %}
+{% set response = fathom.api.getBrowsers(range) %}
+{% set chartId = widget.id ~ '-chart' %}
+{% set chartData = {
+    labels: response | column('browser'),
+    datasets: [
+        {
+            label: 'Visitors' | t('fathom'),
+            backgroundColor: response | map(row => fathom.widgets.getColorForBrowser(row.browser, 0.5)),
+            data: response | column('visits'),
+        },
+        {
+            label: 'Pageviews' | t('fathom'),
+            backgroundColor: response | map(row => fathom.widgets.getColorForBrowser(row.browser, 0.25)),
+            data: response | column('pageviews'),
+        },
+    ],
+} %}
+
 {% set total_pageviews = collect(response).sum('pageviews') %}
 {% set total_visits = collect(response).sum('visits') %}
 
-{% block widget %}
-    <div class="fathom-chart">
-        <canvas id="{{ chartId }}"></canvas>
-    </div>
-    <table>
-        <thead>
+<div class="fathom-chart">
+    <canvas id="{{ chartId }}"></canvas>
+</div>
+<table>
+    <thead>
+    <tr>
+        <th>Browser</th>
+        <th class="fathom-table-shrink">Views</th>
+        <th class="fathom-table-shrink">Visitors</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for row in response %}
+        {% set percentage = (row.pageviews + row.visits) / (total_pageviews + total_visits) * 100 %}
         <tr>
-            <th>Browser</th>
-            <th class="fathom-table-shrink">Views</th>
-            <th class="fathom-table-shrink">Visitors</th>
+            <td class="fathom-table-bar"
+                style="--fathom-bar-percentage: {{ percentage }}; --fathom-bar-color: {{ fathom.widgets.colorForBrowser(row.browser) }}; --fathom-bar-opacity: 0.25;">
+                {{ svg("@fathom/icons/browsers/#{row.browser|kebab}.svg") }}
+                {{ row.browser }}
+            </td>
+            <td class="fathom-table-number" title="{{ row.pageviews | number }}">{{ row.pageviews | fathom_number }}</td>
+            <td class="fathom-table-number" title="{{ row.visits | number }}">{{ row.visits | fathom_number }}</td>
         </tr>
-        </thead>
-        <tbody>
-        {% for row in response %}
-            {% set percentage = (row.pageviews + row.visits) / (total_pageviews + total_visits) * 100 %}
-            <tr>
-                <td class="fathom-table-bar" style="--fathom-bar-percentage: {{ percentage }}; --fathom-bar-color: {{ colors[row.browser] | replace('<alpha>', '1') }}; --fathom-bar-opacity: 0.25;">
-                    {{ svg("@fathom/icons/browsers/#{row.browser|kebab}.svg") }}
-                    {{ row.browser }}
-                </td>
-                <td class="fathom-table-number" title="{{ row.pageviews | number }}">{{ row.pageviews | fathom_number }}</td>
-                <td class="fathom-table-number" title="{{ row.visits | number }}">{{ row.visits | fathom_number }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-{% endblock %}
+    {% endfor %}
+    </tbody>
+</table>
 
-{% js %}
-new Chart(document.getElementById(chartId), {
-    type: 'pie',
-    options: chartSettings,
-    data: chartData
-});
-{% endjs %}
+<script>
+    new Chart(document.getElementById("{{ chartId }}"), {
+        type: 'pie',
+        options: {{ widget.chartSettings | json_encode | raw }},
+        data: {{ chartData | json_encode | raw }},
+    });
+</script>

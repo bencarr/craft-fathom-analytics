@@ -1,20 +1,37 @@
-{% extends 'fathom/widgets/base-widget.twig' %}
-{% block widget %}
-    <div class="fathom-chart">
-        <canvas id="{{ chartId }}"></canvas>
-    </div>
-{% endblock %}
+{% set response = fathom.api.getVisitorsChart(range) %}
+{% set widgetRange = fathom.widgets.getRange(range) %}
+{% set chartId = 'widget' ~ widget.id ~ '-chart' %}
+{% set chartData = {
+    labels: response | map((row) => row.date | date(widgetRange.interval == 'hour' ? 'ga' : 'M j')),
+    datasets: [
+        {
+            label: 'Pageviews' | t('fathom'),
+            backgroundColor: 'rgba(31 95 234 / 0.1)',
+            borderColor: 'rgba(31 95 234 / 0.2)',
+            data: response | column('pageviews'),
+        },
+        {
+            label: 'Visitors' | t('fathom'),
+            backgroundColor: 'rgba(31 95 234 / 0.4)',
+            borderColor: 'rgba(31 95 234 / 1)',
+            data: response | column('visits'),
+        },
+    ],
+} %}
 
-{% js %}
-chartSettings.plugins.tooltip.displayColors = false;
-chartSettings.scales = {
-    x: { grid: { display: false } },
-    y: { grid: { display: false } },
-}
+<div class="fathom-chart">
+    <canvas id="{{ chartId }}"></canvas>
+</div>
 
-new Chart(document.getElementById(chartId), {
-    type: 'line',
-    options: chartSettings,
-    data: chartData
-});
-{% endjs %}
+<script>
+    new Chart(document.getElementById("{{ chartId }}"), {
+        type: 'line',
+        options: {{ widget.chartSettings | merge({
+            scales: {
+                x: { grid: { display: false } },
+                y: { grid: { display: false } },
+            },
+        }) | json_encode | raw }},
+        data: {{ chartData | json_encode | raw }},
+    });
+</script>

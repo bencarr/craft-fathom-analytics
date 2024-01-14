@@ -31,7 +31,7 @@
             console.log('Craft.Fathom.save()', settings)
             Craft.sendActionRequest('POST', 'dashboard/save-widget-settings', { data })
                 .then((response) => {
-                    widget.update(response.data)
+                    // widget.update(response.data)
                 })
                 .catch(({ response }) => {
                     Craft.cp.displayError(Craft.t('widgetkit', 'Failed to refresh widget.'))

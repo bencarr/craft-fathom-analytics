@@ -5,7 +5,6 @@ namespace bencarr\fathom\services;
 use bencarr\fathom\FathomPlugin;
 use bencarr\fathom\helpers\ApiResponse;
 use bencarr\fathom\helpers\FathomDateGrouping;
-use bencarr\fathom\helpers\WidgetDateRange;
 use Craft;
 use craft\helpers\App;
 use GuzzleHttp\Client;
@@ -55,8 +54,9 @@ class Api extends Component
         });
     }
 
-    public function getVisitorsChart(WidgetDateRange $range, string $key)
+    public function getVisitorsChart(string $key)
     {
+        $range = FathomPlugin::getInstance()->widgets->getRange($key);
         $cache_duration = match ($range->interval) {
             FathomDateGrouping::HOUR => 60 * 60,
             default => 60 * 60 * 5,
@@ -78,8 +78,9 @@ class Api extends Component
         });
     }
 
-    public function getBrowsers(WidgetDateRange $range, string $key)
+    public function getBrowsers(string $key)
     {
+        $range = FathomPlugin::getInstance()->widgets->getRange($key);
         return $this->cache("browsers.$key", 60 * 60, function() use ($range) {
             $siteId = App::parseEnv(FathomPlugin::getInstance()->getSettings()->siteId);
             return $this->request('GET', 'aggregations', [
@@ -97,8 +98,9 @@ class Api extends Component
         });
     }
 
-    public function getDeviceTypes(WidgetDateRange $range, string $key)
+    public function getDeviceTypes(string $key)
     {
+        $range = FathomPlugin::getInstance()->widgets->getRange($key);
         return $this->cache("device_types.$key", 60 * 60, function() use ($range) {
             $siteId = App::parseEnv(FathomPlugin::getInstance()->getSettings()->siteId);
             return $this->request('GET', 'aggregations', [
@@ -116,8 +118,9 @@ class Api extends Component
         });
     }
 
-    public function getTopPages(WidgetDateRange $range, string $key)
+    public function getTopPages(string $key)
     {
+        $range = FathomPlugin::getInstance()->widgets->getRange($key);
         return $this->cache("top_pages.$key", 60 * 60, function() use ($range) {
             $siteId = App::parseEnv(FathomPlugin::getInstance()->getSettings()->siteId);
             return $this->request('GET', 'aggregations', [
@@ -136,8 +139,9 @@ class Api extends Component
         });
     }
 
-    public function getTopReferrers(WidgetDateRange $range, string $key)
+    public function getTopReferrers(string $key)
     {
+        $range = FathomPlugin::getInstance()->widgets->getRange($key);
         return $this->cache("top_referrers.$key", 60 * 60, function() use ($range) {
             $siteId = App::parseEnv(FathomPlugin::getInstance()->getSettings()->siteId);
             return $this->request('GET', 'aggregations', [
@@ -156,10 +160,12 @@ class Api extends Component
         });
     }
 
-    public function getOverview(WidgetDateRange $range, string $key)
+    public function getOverview(string $key)
     {
+        $range = FathomPlugin::getInstance()->widgets->getRange($key);
         return $this->cache("overview.$key", 60 * 60, function() use ($range) {
             $siteId = App::parseEnv(FathomPlugin::getInstance()->getSettings()->siteId);
+
             return $this->request('GET', 'aggregations', [
                 'query' => [
                     'entity' => 'pageview',
@@ -169,7 +175,7 @@ class Api extends Component
                     'date_from' => $range->start->format('Y-m-d'),
                     'date_to' => $range->end->format('Y-m-d'),
                 ],
-            ])->json();
+            ])->collect()->first();
         });
     }
 

@@ -1,0 +1,30 @@
+{% set range = range ?? widget.range %}
+
+<div class="fathom">
+    {% if sprig.isInclude %}
+        <div sprig s-trigger="load" class="fathom-loading">
+            <p>Loading…</p>
+        </div>
+    {% else %}
+        <div class="widget-heading fathom-header">
+            <h2>{{ widget.displayName }}</h2>
+
+            {% if widget.range %}
+                <div class="fathom-range">
+                    <label for="widget{{ widget.id }}-range" class="visually-hidden">Range</label>
+                    <select id="widget{{ widget.id }}-range" name="range" sprig s-trigger="change" onchange="
+                        Craft.Fathom.patch({{ widget.id }}, { range: event.target.value })">
+                        {% for key, option in fathom.widgets.getRanges() %}
+                            <option value="{{ key }}" {{ range == key ? 'selected' }}>{{ option.label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% endif %}
+        </div>
+        <div class="fathom--{{ widget.slug }}">
+            {% include 'fathom/widgets/' ~ widget.slug ~ '.twig' with {
+                range: range,
+            } %}
+        </div>
+    {% endif %}
+</div>

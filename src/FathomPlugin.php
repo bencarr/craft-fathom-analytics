@@ -4,7 +4,8 @@ namespace bencarr\fathom;
 
 use bencarr\fathom\models\Settings;
 use bencarr\fathom\services\Api;
-use bencarr\fathom\web\twig\FathomFormatters;
+use bencarr\fathom\services\Widgets;
+use bencarr\fathom\web\twig\FathomExtension;
 use bencarr\fathom\widgets\Browsers;
 use bencarr\fathom\widgets\CurrentVisitors;
 use bencarr\fathom\widgets\DeviceType;
@@ -28,6 +29,7 @@ use yii\base\Event;
  * @copyright Ben Carr
  * @license MIT
  * @property-read Api $api
+ * @property-read Widgets $widgets
  */
 class FathomPlugin extends Plugin
 {
@@ -40,7 +42,10 @@ class FathomPlugin extends Plugin
     public static function config(): array
     {
         return [
-            'components' => ['api' => Api::class],
+            'components' => [
+                'api' => Api::class,
+                'widgets' => Widgets::class,
+            ],
         ];
     }
 
@@ -54,7 +59,7 @@ class FathomPlugin extends Plugin
             $this->attachEventHandlers();
             // ...
         });
-        Craft::$app->view->registerTwigExtension(new FathomFormatters());
+        Craft::$app->view->registerTwigExtension(new FathomExtension());
     }
 
     protected function createSettingsModel(): ?Model

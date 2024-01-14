@@ -2,15 +2,24 @@
 
 namespace bencarr\fathom\web\twig;
 
+use bencarr\fathom\FathomPlugin;
 use Twig\Extension\AbstractExtension;
+use Twig\Extension\GlobalsInterface;
 use Twig\TwigFilter;
 
 /**
  * Twig extension
  */
-class FathomFormatters extends AbstractExtension
+class FathomExtension extends AbstractExtension implements GlobalsInterface
 {
-    public function getFilters()
+    public function getGlobals(): array
+    {
+        return [
+            'fathom' => FathomPlugin::getInstance(),
+        ];
+    }
+
+    public function getFilters(): array
     {
         return [
             new TwigFilter('fathom_duration', function(float $avg_duration) {

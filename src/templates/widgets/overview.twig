@@ -1,22 +1,18 @@
-{% extends 'fathom/widgets/base-widget.twig' %}
+{% set overview = fathom.api.getOverview(range) %}
 
-{% set overview = response | first %}
-
-{% block widget %}
-    <div class="fathom-stat">
-        <span class="fathom-stat-number" title="{{ overview.visits | number }}">{{ overview.visits | fathom_number }}</span>
-        <span class="fathom-stat-label">Visitors</span>
-    </div>
-    <div class="fathom-stat">
-        <span class="fathom-stat-number" title="{{ overview.pageviews | number }}">{{ overview.pageviews | fathom_number }}</span>
-        <span class="fathom-stat-label">Views</span>
-    </div>
-    <div class="fathom-stat">
-        <span class="fathom-stat-number">{{ overview.avg_duration | fathom_duration }}</span>
-        <span class="fathom-stat-label">Avg. Time on Site</span>
-    </div>
-    <div class="fathom-stat">
-        <span class="fathom-stat-number">{{ (overview.bounce_rate * 100) | round(1) }}%</span>
-        <span class="fathom-stat-label">Bounce Rate</span>
-    </div>
-{% endblock %}
+<div class="fathom-stat">
+    <span class="fathom-stat-number" title="{{ overview.visits | number }}">{{ overview.visits | fathom_number }}</span>
+    <span class="fathom-stat-label">Visitors</span>
+</div>
+<div class="fathom-stat">
+    <span class="fathom-stat-number" title="{{ overview.pageviews | number }}">{{ overview.pageviews | fathom_number }}</span>
+    <span class="fathom-stat-label">Views</span>
+</div>
+<div class="fathom-stat">
+    <span class="fathom-stat-number">{{ overview.avg_duration | fathom_duration }}</span>
+    <span class="fathom-stat-label">Avg. Time on Site</span>
+</div>
+<div class="fathom-stat">
+    <span class="fathom-stat-number">{{ (overview.bounce_rate * 100) | round(1) }}%</span>
+    <span class="fathom-stat-label">Bounce Rate</span>
+</div>
