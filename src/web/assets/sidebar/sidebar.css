@@ -1,6 +1,11 @@
 #fathom-sidebar .heading {
     margin-bottom: 8px;
 }
+
+.so-body .fathom--sidebar {
+    display: none !important;
+}
+
 /**
 TABS
  */
