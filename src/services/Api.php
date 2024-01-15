@@ -4,7 +4,6 @@ namespace bencarr\fathom\services;
 
 use bencarr\fathom\FathomPlugin;
 use bencarr\fathom\helpers\ApiResponse;
-use bencarr\fathom\helpers\FathomDateGrouping;
 use Craft;
 use craft\helpers\App;
 use GuzzleHttp\Client;
@@ -54,70 +53,6 @@ class Api extends Component
         });
     }
 
-    public function getVisitorsChart(string $key)
-    {
-        $range = FathomPlugin::getInstance()->widgets->getRange($key);
-        $cache_duration = match ($range->interval) {
-            FathomDateGrouping::HOUR => 60 * 60,
-            default => 60 * 60 * 5,
-        };
-        return $this->cache("visitors_chart.$key", $cache_duration, function() use ($range) {
-            $siteId = App::parseEnv(FathomPlugin::getInstance()->getSettings()->siteId);
-            return $this->request('GET', 'aggregations', [
-                'query' => [
-                    'entity' => 'pageview',
-                    'entity_id' => $siteId,
-                    'aggregates' => 'visits,pageviews',
-                    'timezone' => Craft::$app->getTimeZone(),
-                    'date_from' => $range->start->format('Y-m-d'),
-                    'date_to' => $range->end->format('Y-m-d'),
-                    'date_grouping' => $range->interval,
-                    'sort_by' => 'timestamp:asc',
-                ],
-            ])->json();
-        });
-    }
-
-    public function getBrowsers(string $key)
-    {
-        $range = FathomPlugin::getInstance()->widgets->getRange($key);
-        return $this->cache("browsers.$key", 60 * 60, function() use ($range) {
-            $siteId = App::parseEnv(FathomPlugin::getInstance()->getSettings()->siteId);
-            return $this->request('GET', 'aggregations', [
-                'query' => [
-                    'entity' => 'pageview',
-                    'entity_id' => $siteId,
-                    'aggregates' => 'visits,pageviews',
-                    'sort_by' => 'pageviews:desc',
-                    'field_grouping' => 'browser',
-                    'timezone' => Craft::$app->getTimeZone(),
-                    'date_from' => $range->start->format('Y-m-d'),
-                    'date_to' => $range->end->format('Y-m-d'),
-                ],
-            ])->json();
-        });
-    }
-
-    public function getDeviceTypes(string $key)
-    {
-        $range = FathomPlugin::getInstance()->widgets->getRange($key);
-        return $this->cache("device_types.$key", 60 * 60, function() use ($range) {
-            $siteId = App::parseEnv(FathomPlugin::getInstance()->getSettings()->siteId);
-            return $this->request('GET', 'aggregations', [
-                'query' => [
-                    'entity' => 'pageview',
-                    'entity_id' => $siteId,
-                    'aggregates' => 'visits,pageviews',
-                    'sort_by' => 'pageviews:desc',
-                    'field_grouping' => 'device_type',
-                    'timezone' => Craft::$app->getTimeZone(),
-                    'date_from' => $range->start->format('Y-m-d'),
-                    'date_to' => $range->end->format('Y-m-d'),
-                ],
-            ])->json();
-        });
-    }
-
     public function getTopPages(string $key)
     {
         $range = FathomPlugin::getInstance()->widgets->getRange($key);
@@ -139,44 +74,104 @@ class Api extends Component
         });
     }
 
-    public function getTopReferrers(string $key)
+    public function getVisitorsChart(string $range, ?string $uri = null)
     {
-        $range = FathomPlugin::getInstance()->widgets->getRange($key);
-        return $this->cache("top_referrers.$key", 60 * 60, function() use ($range) {
-            $siteId = App::parseEnv(FathomPlugin::getInstance()->getSettings()->siteId);
-            return $this->request('GET', 'aggregations', [
-                'query' => [
-                    'entity' => 'pageview',
-                    'entity_id' => $siteId,
+        $widgetRange = FathomPlugin::getInstance()->widgets->getRange($range);
+
+        return $this->cache("visitors_chart.$range", 60 * 60, fn() => $this
+            ->getAggregation(
+                params: [
                     'aggregates' => 'visits,pageviews',
-                    'sort_by' => 'pageviews:desc',
-                    'field_grouping' => 'referrer_hostname',
-                    'timezone' => Craft::$app->getTimeZone(),
-                    'date_from' => $range->start->format('Y-m-d'),
-                    'date_to' => $range->end->format('Y-m-d'),
-                    'limit' => 10,
+                    'date_grouping' => $widgetRange->interval,
+                    'sort_by' => 'timestamp:asc',
                 ],
-            ])->json();
-        });
+                range: $range,
+                uri: $uri,
+            )->json());
     }
 
-    public function getOverview(string $key)
+    public function getBrowsers(string $range, ?string $uri = null)
     {
-        $range = FathomPlugin::getInstance()->widgets->getRange($key);
-        return $this->cache("overview.$key", 60 * 60, function() use ($range) {
-            $siteId = App::parseEnv(FathomPlugin::getInstance()->getSettings()->siteId);
-
-            return $this->request('GET', 'aggregations', [
-                'query' => [
-                    'entity' => 'pageview',
-                    'entity_id' => $siteId,
-                    'aggregates' => 'visits,pageviews,avg_duration,bounce_rate',
-                    'timezone' => Craft::$app->getTimeZone(),
-                    'date_from' => $range->start->format('Y-m-d'),
-                    'date_to' => $range->end->format('Y-m-d'),
+        return $this->cache("browsers.$range", 60 * 60, fn() => $this
+            ->getAggregation(
+                params: [
+                    'aggregates' => 'visits,pageviews',
+                    'sort_by' => 'pageviews:desc',
+                    'field_grouping' => 'browser',
                 ],
-            ])->collect()->first();
-        });
+                range: $range,
+                uri: $uri,
+            )->json());
+    }
+
+    public function getDeviceTypes(string $range, ?string $uri = null)
+    {
+        return $this->cache("device_types.$range", 60 * 60, fn() => $this
+            ->getAggregation(
+                params: [
+                    'aggregates' => 'visits,pageviews',
+                    'sort_by' => 'pageviews:desc',
+                    'field_grouping' => 'device_type',
+                ],
+                range: $range,
+                uri: $uri,
+            )
+            ->json());
+    }
+
+    public function getTopReferrers(string $range, ?string $uri = null)
+    {
+        return $this->cache("top_referrers.$range", 60 * 60, fn() => $this
+            ->getAggregation(
+                params: [
+                    'aggregates' => 'visits,pageviews',
+                    'limit' => 10,
+                    'field_grouping' => 'referrer_hostname',
+                    'sort_by' => 'pageviews:desc',
+                ],
+                range: $range,
+                uri: $uri,
+            )
+            ->json());
+    }
+
+    public function getOverview(string $range, ?string $uri = null)
+    {
+        return $this->cache("overview.$range", 60 * 60, fn() => $this
+            ->getAggregation(
+                params: ['aggregates' => 'visits,pageviews,avg_duration,bounce_rate'],
+                range: $range,
+                uri: $uri,
+            )
+            ->collect()
+            ->first());
+    }
+
+    protected function getAggregation(array $params = [], ?string $range = null, ?string $uri = null): ApiResponse
+    {
+        $siteId = App::parseEnv(FathomPlugin::getInstance()->getSettings()->siteId);
+        $query = [
+            ...$params,
+            'entity' => 'pageview',
+            'entity_id' => $siteId,
+            'timezone' => Craft::$app->getTimeZone(),
+        ];
+
+        if ($range) {
+            $widgetRange = FathomPlugin::getInstance()->widgets->getRange($range);
+            $query['date_from'] = $widgetRange->start->format('Y-m-d');
+            $query['date_to'] = $widgetRange->end->format('Y-m-d');
+        }
+
+        if ($uri) {
+            $query['filters'] = json_encode([
+                ['property' => 'pathname', 'operator' => 'is', 'value' => $uri],
+            ]);
+        }
+
+        return $this->request('GET', 'aggregations', [
+            'query' => $query,
+        ]);
     }
 
     public function cache(string $key, int $duration, callable $setter)

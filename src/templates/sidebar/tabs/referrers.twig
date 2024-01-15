@@ -1,0 +1,23 @@
+{% set response = fathom.api.getTopReferrers(range) %}
+{% set max_views = response | column('pageviews') | first %}
+
+<table>
+    <thead>
+    <tr>
+        <th>Top Paths</th>
+        <th class="fathom-table-shrink">Visits</th>
+        <th class="fathom-table-shrink">Views</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for row in response %}
+        {% set percentage = (row.pageviews / max_views * 100) | round %}
+        {% set referrer = row.referrer_hostname | replace('/^https?:\\/\\/(?:www\.)?/', '') %}
+        <tr>
+            <td class="fathom-table-bar" style="--fathom-bar-percentage: {{ percentage }}">{{ referrer ?: 'Direct / Unknown' }}</td>
+            <td class="fathom-table-number" title="{{ row.visits | number }}">{{ row.visits | fathom_number }}</td>
+            <td class="fathom-table-number" title="{{ row.pageviews | number }}">{{ row.pageviews | fathom_number }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

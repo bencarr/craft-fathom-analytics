@@ -1,0 +1,46 @@
+{# @var string $uri #}
+{% set tab = tab ?? 'overview' %}
+{% set range = range ?? 'last_30_days' %}
+
+{% set tabs = {
+    overview: 'Overview' | t('fathom'),
+    visitors: 'Visitors' | t('fathom'),
+    browsers: 'Browsers' | t('fathom'),
+    devices: 'Devices' | t('fathom'),
+    referrers: 'Referrers' | t('fathom'),
+} %}
+
+<div class="meta">
+    <div class="fathom-tabs">
+        {% for value, label in tabs %}
+            <label class="fathom-tab">
+                <input type="radio" name="tab" class="fathom-tab-input" value="{{ value }}" {{ value == tab ? 'checked' }} sprig s-trigger="change" s-indicator="#fathom-sidebar"/>
+                <span class="fathom-tab-label">{{ label }}</span>
+            </label>
+        {% endfor %}
+    </div>
+
+    <div class="fathom-tab-content">
+        {% if sprig.isInclude %}
+            <div class="fathom-initial-placeholder">
+                <div class="fathom-loading" sprig s-trigger="load" s-indicator="#fathom-sidebar"></div>
+            </div>
+        {% else %}
+            <div class="fathom-tab-body">
+                {% include 'fathom/sidebar/tabs/' ~ tab with {
+                    uri: uri,
+                } %}
+            </div>
+
+            <div class="fathom-tab-footer">
+                <label for="fathom-sidebar-range" class="visually-hidden">Range</label>
+                <select id="fathom-sidebar-range" name="range" sprig s-trigger="change" s-indicator="#fathom-sidebar">
+                    {% for key, option in fathom.widgets.getRanges() %}
+                        <option value="{{ key }}" {{ range == key ? 'selected' }}>{{ option.label }}</option>
+                    {% endfor %}
+                </select>
+                <span class="fathom-loading"></span>
+            </div>
+        {% endif %}
+    </div>
+</div>

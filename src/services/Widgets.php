@@ -2,6 +2,7 @@
 
 namespace bencarr\fathom\services;
 
+use bencarr\fathom\events\RegisterChartJsSettingsEvent;
 use bencarr\fathom\events\RegisterWidgetRangesEvent;
 use bencarr\fathom\FathomPlugin;
 use bencarr\fathom\helpers\Color;
@@ -79,5 +80,55 @@ class Widgets extends Component
     public function getColorForIndex(int $index, float $alpha = 1.0)
     {
         return Color::index($index)->atAlpha($alpha);
+    }
+
+    public function getChartJsSettings()
+    {
+        $event = new RegisterChartJsSettingsEvent([
+            'settings' => [
+                'responsive' => true,
+                'maintainAspectRatio' => false,
+                'interaction' => [
+                    'intersect' => false,
+                    'mode' => 'index',
+                ],
+                'borderWidth' => 2,
+                'datasets' => [
+                    'line' => [
+                        'fill' => true,
+                        'tension' => 0.2,
+                        'pointBackgroundColor' => 'rgba(0 0 0 / 0)',
+                        'pointBorderWidth' => 0,
+                        'hoverBackgroundColor' => 'rgba(31 95 234 / 0.7)',
+                        'hoverBorderColor' => 'rgba(31 95 234 / 0.7)',
+                    ],
+                ],
+                'plugins' => [
+                    'legend' => [
+                        'display' => false,
+                    ],
+                    'tooltip' => [
+                        'boxPadding' => 4,
+                        'displayColors' => false,
+                        'padding' => [
+                            'left' => 12,
+                            'right' => 12,
+                            'top' => 8,
+                            'bottom' => 8,
+                        ],
+                        'titleFont' => [
+                            'size' => 14,
+                        ],
+                        'bodyFont' => [
+                            'size' => 14,
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+
+        $this->trigger(FathomPlugin::EVENT_REGISTER_CHART_JS_SETTINGS, $event);
+
+        return $event->settings;
     }
 }

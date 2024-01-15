@@ -5,6 +5,7 @@ namespace bencarr\fathom;
 use bencarr\fathom\models\Settings;
 use bencarr\fathom\services\Api;
 use bencarr\fathom\services\Widgets;
+use bencarr\fathom\web\assets\sidebar\SidebarAsset;
 use bencarr\fathom\web\twig\FathomExtension;
 use bencarr\fathom\widgets\Browsers;
 use bencarr\fathom\widgets\CurrentVisitors;
@@ -14,8 +15,11 @@ use bencarr\fathom\widgets\TopPages;
 use bencarr\fathom\widgets\TopReferrers;
 use bencarr\fathom\widgets\VisitorsChart;
 use Craft;
+use craft\base\Element;
 use craft\base\Model;
 use craft\base\Plugin;
+use craft\elements\Entry;
+use craft\events\DefineHtmlEvent;
 use craft\events\RegisterComponentTypesEvent;
 use craft\services\Dashboard;
 use yii\base\Event;
@@ -92,6 +96,15 @@ class FathomPlugin extends Plugin
             $event->types[] = TopPages::class;
             $event->types[] = TopReferrers::class;
             $event->types[] = Overview::class;
+        });
+
+        Event::on(Entry::class, Element::EVENT_DEFINE_SIDEBAR_HTML, function(DefineHtmlEvent $event) {
+            if ($event->sender->uri) {
+                Craft::$app->getView()->registerAssetBundle(SidebarAsset::class);
+                $event->html .= Craft::$app->getView()->renderTemplate('fathom/sidebar.twig', [
+                    'entry' => $event->sender,
+                ]);
+            }
         });
     }
 }

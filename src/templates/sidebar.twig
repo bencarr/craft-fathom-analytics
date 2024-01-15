@@ -1,0 +1,8 @@
+<div id="fathom-sidebar" class="field fathom fathom--sidebar htmx-request">
+    <div class="heading">
+        <p class="h6">{{ 'Analytics' | t('fathom') }}</p>
+    </div>
+    {{ sprig('fathom/sidebar/index.twig', {
+        uri: entry.uri starts with '/' ? entry.uri : '/' ~ entry.uri,
+    }) }}
+</div>
