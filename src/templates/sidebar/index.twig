@@ -10,20 +10,25 @@
     referrers: 'Referrers' | t('fathom'),
 } %}
 
-<div class="meta">
-    <div class="fathom-tabs">
+<div class="meta" hx-indicator="#fathom-sidebar">
+    <div class="fathom-tabs" role="tablist">
         {% for value, label in tabs %}
-            <label class="fathom-tab">
-                <input type="radio" name="tab" class="fathom-tab-input" value="{{ value }}" {{ value == tab ? 'checked' }} sprig s-trigger="change" s-indicator="#fathom-sidebar"/>
-                <span class="fathom-tab-label">{{ label }}</span>
-            </label>
+            {{ tag('button', {
+                type: 'button',
+                text: label,
+                class: 'fathom-tab',
+                role: 'tab',
+                sprig: value != tab,
+                's-vals': { tab: value, range: range },
+                'aria-selected': value == tab ? 'true' : false,
+            }) }}
         {% endfor %}
     </div>
 
     <div class="fathom-tab-content">
         {% if sprig.isInclude %}
             <div class="fathom-initial-placeholder">
-                <div class="fathom-loading" sprig s-trigger="load" s-indicator="#fathom-sidebar"></div>
+                <div class="fathom-loading" sprig s-trigger="load"></div>
             </div>
         {% else %}
             <div class="fathom-tab-body">
@@ -34,7 +39,11 @@
 
             <div class="fathom-tab-footer">
                 <label for="fathom-sidebar-range" class="visually-hidden">Range</label>
-                <select id="fathom-sidebar-range" name="range" sprig s-trigger="change" s-indicator="#fathom-sidebar">
+                {#
+                Omit the `[name]` attribute to prevent Craft from tracking it as an element edit form field
+                and saving an element draft any time the range changes.
+                #}
+                <select id="fathom-sidebar-range" data-name="range" sprig s-trigger="change" s-val:tab="{{ tab }}">
                     {% for key, option in fathom.widgets.getRanges() %}
                         <option value="{{ key }}" {{ range == key ? 'selected' }}>{{ option.label }}</option>
                     {% endfor %}
