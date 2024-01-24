@@ -140,6 +140,7 @@ TABLES
     z-index: 0;
     padding-left: 0.5em;
     text-shadow: 1px 1px rgba(255 255 255 / 0.5);
+    word-break: break-word;
 }
 
 .fathom-table-bar svg {
