@@ -73,14 +73,12 @@ class FathomPlugin extends Plugin
 
     protected function settingsHtml(): ?string
     {
-        $site = null;
-        if ($this->getSettings()->siteId && $this->getSettings()->apiKey) {
-            $site = $this->api->getSite();
-        }
+        $overrides = Craft::$app->getConfig()->getConfigFromFile($this->handle);
+
         return Craft::$app->view->renderTemplate('fathom/_settings.twig', [
             'plugin' => $this,
             'settings' => $this->getSettings(),
-            'site' => $site,
+            'overrides' => $overrides,
         ]);
     }
 

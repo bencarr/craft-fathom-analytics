@@ -3,6 +3,15 @@
 
 {% import '_includes/forms.twig' as forms %}
 
+{% macro configWarning(plugin, setting) -%}
+    {{ "This setting is being overridden by the **`{setting}`** parameter in your **`{file}`** config file." | t(plugin.handle, {
+        setting: setting,
+        file: plugin.handle ~ '.php',
+    }) }}
+{%- endmacro %}
+
+{% from _self import configWarning %}
+
 {{ forms.autosuggestField({
     first: true,
     label: 'API Key',
@@ -11,6 +20,8 @@
     value: settings.apiKey,
     suggestEnvVars: true,
     errors: settings.getErrors('apiKey'),
+    disabled: 'apiKey' in overrides | keys,
+    warning: 'apiKey' in overrides | keys ? configWarning(plugin, 'apiKey'),
 }) }}
 
 {{ forms.autosuggestField({
@@ -20,4 +31,6 @@
     value: settings.siteId,
     suggestEnvVars: true,
     errors: settings.getErrors('siteId'),
+    disabled: 'siteId' in overrides | keys,
+    warning: 'siteId' in overrides | keys ? configWarning(plugin, 'siteId'),
 }) }}
