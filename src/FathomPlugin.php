@@ -22,6 +22,7 @@ use craft\elements\Entry;
 use craft\events\DefineHtmlEvent;
 use craft\events\RegisterComponentTypesEvent;
 use craft\services\Dashboard;
+use putyourlightson\sprig\Sprig;
 use yii\base\Event;
 
 /**
@@ -58,7 +59,8 @@ class FathomPlugin extends Plugin
         parent::init();
         Craft::setAlias('@fathom', __DIR__);
 
-        // Defer most setup tasks until Craft is fully initialized
+        Sprig::bootstrap();
+
         Craft::$app->onInit(function() {
             $this->attachEventHandlers();
             // ...

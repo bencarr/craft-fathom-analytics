@@ -7,7 +7,6 @@ use bencarr\fathom\web\assets\widgets\WidgetsAsset;
 use Craft;
 use craft\base\Widget;
 use craft\helpers\StringHelper;
-use putyourlightson\sprig\Sprig;
 
 class BaseWidget extends Widget
 {
@@ -38,7 +37,6 @@ class BaseWidget extends Widget
     public function getBodyHtml(): ?string
     {
         Craft::$app->getView()->registerAssetBundle(WidgetsAsset::class);
-        Sprig::bootstrap();
 
         return Craft::$app->getView()->renderTemplate("fathom/widget.twig", [
             'widget' => $this,
