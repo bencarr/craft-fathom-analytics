@@ -56,7 +56,7 @@ Once the plugin is installed, you’ll need to configure your API Key and Site I
 
 ### From the Plugin Settings Page
 
-On an environment with admin settings enabled, open Settings then press “Fathom Analytics” under the “Plugins” section. Your API key is sensitive data, so you’ll probably want to use an environment variable that you keep out of version control.
+On an environment with admin changes enabled, open Settings then press “Fathom Analytics” under the “Plugins” section. Your API key is sensitive data, so you’ll probably want to use an environment variable that you keep out of version control.
 
 ### From a Configuration File
 
