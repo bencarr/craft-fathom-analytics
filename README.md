@@ -96,6 +96,8 @@ The plugin comes with a set of default ranges covering a scale of time from 1 da
 
 #### Removing a Default Range
 
+Remove a default range by unsetting its key in the `ranges` array.
+
 ```php
 use bencarr\fathom\events\RegisterWidgetRangesEvent;
 use bencarr\fathom\FathomPlugin;
@@ -112,7 +114,7 @@ Event::on(
 
 #### Adding a Custom Range
 
-The ranges event expects a keyed array of `WidgetDateRange` objects. To add a new range, add a new key to the `ranges` array on the event and construct a WidgetDateRange instance with your desired configuration:
+The ranges event expects a keyed array of `WidgetDateRange` objects. To add a new range, add a new key to the `ranges` array on the event and construct a `WidgetDateRange` instance with your desired configuration:
 
 ```php
 use bencarr\fathom\events\RegisterWidgetRangesEvent;
