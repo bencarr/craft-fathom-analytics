@@ -62,7 +62,8 @@ class Widgets extends Component
                 ),
             ],
         ]);
-        $this->trigger(FathomPlugin::EVENT_DEFINE_WIDGET_RANGES, $event);
+
+        FathomPlugin::getInstance()->trigger(FathomPlugin::EVENT_DEFINE_WIDGET_RANGES, $event);
 
         return $event->ranges;
     }
