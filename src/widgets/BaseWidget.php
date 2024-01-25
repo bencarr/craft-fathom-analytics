@@ -32,7 +32,7 @@ class BaseWidget extends Widget
 
     public static function icon(): ?string
     {
-        return null;
+        return '@fathom/widget-icon.svg';
     }
 
     public function getBodyHtml(): ?string
@@ -48,7 +48,7 @@ class BaseWidget extends Widget
     public function toSprig(): array
     {
         return [
-            'displayName' => $this->displayName(),
+            'displayName' => static::displayName(),
             'slug' => $this->getSlug(),
             'id' => $this->id,
             'colspan' => $this->colspan,
