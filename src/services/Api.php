@@ -60,7 +60,7 @@ class Api extends Component
     public function getTopPages(string $key)
     {
         $range = FathomPlugin::getInstance()->widgets->getRange($key);
-        return $this->cache("top_pages.$key", 60 * 60, function() use ($range) {
+        return $this->cache("top_pages.$key", 60 * 5, function() use ($range) {
             $siteId = App::parseEnv(FathomPlugin::getInstance()->getSettings()->siteId);
             return $this->request('GET', 'aggregations', [
                 'query' => [
@@ -82,7 +82,7 @@ class Api extends Component
     {
         $widgetRange = FathomPlugin::getInstance()->widgets->getRange($range);
 
-        return $this->cache("visitors_chart.$range", 60 * 60, fn() => $this
+        return $this->cache("visitors_chart.$range", 60 * 5, fn() => $this
             ->getAggregation(
                 params: [
                     'aggregates' => 'visits,pageviews',
@@ -96,7 +96,7 @@ class Api extends Component
 
     public function getBrowsers(string $range, ?string $uri = null)
     {
-        return $this->cache("browsers.$range", 60 * 60, fn() => $this
+        return $this->cache("browsers.$range", 60 * 5, fn() => $this
             ->getAggregation(
                 params: [
                     'aggregates' => 'visits,pageviews',
@@ -110,7 +110,7 @@ class Api extends Component
 
     public function getDeviceTypes(string $range, ?string $uri = null)
     {
-        return $this->cache("device_types.$range", 60 * 60, fn() => $this
+        return $this->cache("device_types.$range", 60 * 5, fn() => $this
             ->getAggregation(
                 params: [
                     'aggregates' => 'visits,pageviews',
@@ -125,7 +125,7 @@ class Api extends Component
 
     public function getTopReferrers(string $range, ?string $uri = null)
     {
-        return $this->cache("top_referrers.$range", 60 * 60, fn() => $this
+        return $this->cache("top_referrers.$range", 60 * 5, fn() => $this
             ->getAggregation(
                 params: [
                     'aggregates' => 'visits,pageviews',
@@ -141,7 +141,7 @@ class Api extends Component
 
     public function getOverview(string $range, ?string $uri = null)
     {
-        return $this->cache("overview.$range", 60 * 60, fn() => $this
+        return $this->cache("overview.$range", 60 * 5, fn() => $this
             ->getAggregation(
                 params: ['aggregates' => 'visits,pageviews,avg_duration,bounce_rate'],
                 range: $range,
