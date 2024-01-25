@@ -3,18 +3,18 @@
 <ul class="fathom-sidebar-stats">
     <li class="fathom-sidebar-stat">
         <span class="fathom-sidebar-stat-number" title="{{ overview.visits | number }}">{{ overview.visits | fathom_number }}</span>
-        <span class="fathom-sidebar-stat-label">Visitors</span>
+        <span class="fathom-sidebar-stat-label">{{ 'Visitors' | t('fathom') }}</span>
     </li>
     <li class="fathom-sidebar-stat">
         <span class="fathom-sidebar-stat-number" title="{{ overview.pageviews | number }}">{{ overview.pageviews | fathom_number }}</span>
-        <span class="fathom-sidebar-stat-label">Views</span>
+        <span class="fathom-sidebar-stat-label">{{ 'Views' | t('fathom') }}</span>
     </li>
     <li class="fathom-sidebar-stat">
         <span class="fathom-sidebar-stat-number">{{ overview.avg_duration | fathom_duration }}</span>
-        <span class="fathom-sidebar-stat-label">Avg. Time on Page</span>
+        <span class="fathom-sidebar-stat-label">{{ 'Avg. Time on Page' | t('fathom') }}</span>
     </li>
     <li class="fathom-sidebar-stat">
         <span class="fathom-sidebar-stat-number">{{ (overview.bounce_rate * 100) | round(1) }}%</span>
-        <span class="fathom-sidebar-stat-label">Bounce Rate</span>
+        <span class="fathom-sidebar-stat-label">{{ 'Bounce Rate' | t('fathom') }}</span>
     </li>
 </ul>

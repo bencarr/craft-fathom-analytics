@@ -11,15 +11,15 @@
 
 <p class="fathom-stat">
     <span class="fathom-stat-number">{{ response.total | fathom_number }}</span>
-    <span class="fathom-stat-label">On the site</span>
+    <span class="fathom-stat-label">{{ 'On the site' | t('fathom') }}</span>
 </p>
 
 {% if response.content is not empty %}
     <table>
         <thead>
         <tr>
-            <th>Top Paths</th>
-            <th class="fathom-table-shrink">Visitors</th>
+            <th>{{ 'Top Paths' | t('fathom') }}</th>
+            <th class="fathom-table-shrink">{{ 'Visitors' | t('fathom') }}</th>
         </tr>
         </thead>
         <tbody>
@@ -40,8 +40,8 @@
     <table>
         <thead>
         <tr>
-            <th>Top Referrers</th>
-            <th class="fathom-table-shrink">Visitors</th>
+            <th>{{ 'Top Referrers' | t('fathom') }}</th>
+            <th class="fathom-table-shrink">{{ 'Visitors' | t('fathom') }}</th>
         </tr>
         </thead>
         <tbody>

@@ -14,8 +14,8 @@
 
 {{ forms.autosuggestField({
     first: true,
-    label: 'API Key',
-    instructions: '[Create an API key](https://app.usefathom.com/api/create) in your Fathom Analytics account.',
+    label: 'API Key' | t('fathom'),
+    instructions: '[Create an API key](https://app.usefathom.com/api/create) in your Fathom Analytics account.' | t('fathom'),
     name: 'apiKey',
     value: settings.apiKey,
     suggestEnvVars: true,
@@ -25,8 +25,8 @@
 }) }}
 
 {{ forms.autosuggestField({
-    label: 'Site ID',
-    instructions: '[Find your site ID](https://app.usefathom.com/sites) by viewing the site in your Fathom Analytics account.',
+    label: 'Site ID' | t('fathom'),
+    instructions: '[Find your site ID](https://app.usefathom.com/sites) by viewing the site in your Fathom Analytics account.' | t('fathom'),
     name: 'siteId',
     value: settings.siteId,
     suggestEnvVars: true,

@@ -8,6 +8,7 @@ use bencarr\fathom\FathomPlugin;
 use bencarr\fathom\helpers\Color;
 use bencarr\fathom\helpers\FathomDateGrouping;
 use bencarr\fathom\helpers\WidgetDateRange;
+use Craft;
 use craft\helpers\DateTimeHelper;
 use DateInterval;
 use yii\base\Component;
@@ -19,44 +20,44 @@ class Widgets extends Component
         $event = new RegisterWidgetRangesEvent([
             'ranges' => [
                 'today' => new WidgetDateRange(
-                    label: 'Last 24 Hours',
+                    label: Craft::t('fathom', 'Last {num,number} Hours', ['num' => 24]),
                     start: DateTimeHelper::now()->sub(new DateInterval('PT24H')),
                     end: DateTimeHelper::now(),
                     interval: FathomDateGrouping::HOUR,
                 ),
                 'last_7_days' => new WidgetDateRange(
-                    label: 'Last 7 Days',
+                    label: Craft::t('fathom', 'Last {num,number} Days', ['num' => 7]),
                     start: DateTimeHelper::tomorrow()->sub(new DateInterval('P7D')),
                     end: DateTimeHelper::tomorrow(),
                 ),
                 'last_14_days' => new WidgetDateRange(
-                    label: 'Last 14 Days',
+                    label: Craft::t('fathom', 'Last {num,number} Days', ['num' => 14]),
                     start: DateTimeHelper::tomorrow()->sub(new DateInterval('P14D')),
                     end: DateTimeHelper::tomorrow(),
                 ),
                 'last_30_days' => new WidgetDateRange(
-                    label: 'Last 30 Days',
+                    label: Craft::t('fathom', 'Last {num,number} Days', ['num' => 30]),
                     start: DateTimeHelper::tomorrow()->sub(new DateInterval('P30D')),
                     end: DateTimeHelper::tomorrow(),
                 ),
                 'last_60_days' => new WidgetDateRange(
-                    label: 'Last 60 Days',
+                    label: Craft::t('fathom', 'Last {num,number} Days', ['num' => 60]),
                     start: DateTimeHelper::tomorrow()->sub(new DateInterval('P60D')),
                     end: DateTimeHelper::tomorrow(),
                 ),
                 'last_90_days' => new WidgetDateRange(
-                    label: 'Last 90 Days',
+                    label: Craft::t('fathom', 'Last {num,number} Days', ['num' => 90]),
                     start: DateTimeHelper::tomorrow()->sub(new DateInterval('P90D')),
                     end: DateTimeHelper::tomorrow(),
                 ),
                 'last_180_days' => new WidgetDateRange(
-                    label: 'Last 180 Days',
+                    label: Craft::t('fathom', 'Last {num,number} Days', ['num' => 180]),
                     start: DateTimeHelper::tomorrow()->sub(new DateInterval('P180D')),
                     end: DateTimeHelper::tomorrow(),
                 ),
                 'last_365_days' => new WidgetDateRange(
-                    label: 'Last 365 Days',
-                    start: DateTimeHelper::tomorrow()->sub(new DateInterval('P1Y')),
+                    label: Craft::t('fathom', 'Last {num,number} Days', ['num' => 365]),
+                    start: DateTimeHelper::tomorrow()->sub(new DateInterval('P365D')),
                     end: DateTimeHelper::tomorrow(),
                 ),
             ],
