@@ -34,10 +34,14 @@ class Api extends Component
 
     public function getSite()
     {
-        return $this->cache('site', 60 * 60 * 24, function() {
-            $siteId = App::parseEnv(FathomPlugin::getInstance()->getSettings()->siteId);
-            return $this->request('GET', 'sites/' . $siteId)->json();
-        });
+        $siteId = App::parseEnv(FathomPlugin::getInstance()->getSettings()->siteId);
+        $response = $this->request('GET', 'sites/' . $siteId);
+
+        if (!$response->isOk()) {
+            return false;
+        }
+
+        return $response->json();
     }
 
     public function getCurrentVisitors()
@@ -184,7 +188,6 @@ class Api extends Component
         try {
             $response = $this->client->request($method, $uri, $options);
         } catch (RequestException $e) {
-            Craft::dd([$e->getCode(), $e->getMessage(), $e->getRequest(), $e->getResponse()]);
             $response = $e->getResponse();
         }
 

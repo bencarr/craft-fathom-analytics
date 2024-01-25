@@ -12,6 +12,13 @@
 
 {% from _self import configWarning %}
 
+<div class="flex gap-l">
+    {{ svg('@fathom/icon.svg') | attr({ width: 32, height: 32 }) }}
+    {{ sprig('fathom/settings/connection-status.twig') }}
+</div>
+
+<hr />
+
 {{ forms.autosuggestField({
     first: true,
     label: 'API Key' | t('fathom'),

@@ -1,0 +1,25 @@
+{% if sprig.isInclude %}
+    <div sprig s-trigger="load" class="fathom-loading">
+        <span class="spinner"></span>
+    </div>
+{% else %}
+    {% if fathom.settings.apiKey and fathom.settings.siteId %}
+        {% set site = fathom.api.getSite() %}
+        {% if site %}
+            <div class="element small hasstatus">
+                <span class="status active"></span>
+                <span>{{ 'Connected to **{name}** (`{id}`)' | t('fathom', { name: site.name, id: site.id }) | md(inline_only=true) }}</span>
+            </div>
+        {% elseif site is same as(false) %}
+            <div class="element small hasstatus">
+                <span class="status expired"></span>
+                <span>{{ 'Invalid configuration' | t('fathom') }}</span>
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="element small hasstatus">
+            <span class="status disabled"></span>
+            <span class="extralight">{{ 'Not yet configured' | t('fathom') }}</span>
+        </div>
+    {% endif %}
+{% endif %}
